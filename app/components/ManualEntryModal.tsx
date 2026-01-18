@@ -26,9 +26,13 @@ export function ManualEntryModal({ isOpen, onClose, editData }: ManualEntryModal
     imageUrl: "",
     description: "",
     location: null as { lat: number; lng: number } | null,
+    pros: [] as string[],
+    cons: [] as string[],
   });
   const [loading, setLoading] = useState(false);
   const [isGeocoding, setIsGeocoding] = useState(false);
+  const [proInput, setProInput] = useState("");
+  const [conInput, setConInput] = useState("");
 
   useEffect(() => {
     if (editData) {
@@ -45,6 +49,8 @@ export function ManualEntryModal({ isOpen, onClose, editData }: ManualEntryModal
         imageUrl: editData.imageUrl || "",
         description: editData.description || "",
         location: editData.location || null,
+        pros: editData.pros || [],
+        cons: editData.cons || [],
       });
     } else {
         setFormData({
@@ -60,6 +66,8 @@ export function ManualEntryModal({ isOpen, onClose, editData }: ManualEntryModal
             imageUrl: "",
             description: "",
             location: null,
+            pros: [],
+            cons: [],
           });
     }
   }, [editData, isOpen]);
@@ -267,14 +275,116 @@ export function ManualEntryModal({ isOpen, onClose, editData }: ManualEntryModal
                 />
                 </div>
             </div>
-            <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-700 dark:text-zinc-300">Description</label>
-                <textarea
-                className="w-full p-4 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all min-h-[100px] placeholder:text-gray-400"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Notes..."
-                />
+            <div className="space-y-4 pt-4 border-t border-gray-100 dark:border-zinc-800">
+                <div className="space-y-2">
+                    <label className="text-sm font-bold text-emerald-600 uppercase flex items-center gap-2">
+                        <Plus className="w-4 h-4" /> Pros
+                    </label>
+                    <div className="flex gap-2">
+                        <input
+                            type="text"
+                            className="flex-1 p-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all placeholder:text-gray-400"
+                            value={proInput}
+                            onChange={(e) => setProInput(e.target.value)}
+                            placeholder="Quiet street, Renovated..."
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    if (proInput.trim()) {
+                                        setFormData(prev => ({ ...prev, pros: [...prev.pros, proInput.trim()] }));
+                                        setProInput("");
+                                    }
+                                }
+                            }}
+                        />
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (proInput.trim()) {
+                                    setFormData(prev => ({ ...prev, pros: [...prev.pros, proInput.trim()] }));
+                                    setProInput("");
+                                }
+                            }}
+                            className="p-3 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-100 transition-colors"
+                        >
+                            <Plus className="w-5 h-5" />
+                        </button>
+                    </div>
+                    <ul className="flex flex-wrap gap-2 mt-2">
+                        {formData.pros.map((pro, i) => (
+                            <li key={i} className="px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-bold flex items-center gap-2 group border border-emerald-100">
+                                {pro}
+                                <button 
+                                    type="button" 
+                                    onClick={() => setFormData(prev => ({ ...prev, pros: prev.pros.filter((_, idx) => idx !== i) }))}
+                                    className="hover:text-emerald-900"
+                                >
+                                    <X className="w-3 h-3" />
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                <div className="space-y-2">
+                    <label className="text-sm font-bold text-rose-500 uppercase flex items-center gap-2">
+                        <Plus className="w-4 h-4" /> Cons
+                    </label>
+                    <div className="flex gap-2">
+                        <input
+                            type="text"
+                            className="flex-1 p-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none transition-all placeholder:text-gray-400"
+                            value={conInput}
+                            onChange={(e) => setConInput(e.target.value)}
+                            placeholder="No elevator, Expensive..."
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    if (conInput.trim()) {
+                                        setFormData(prev => ({ ...prev, cons: [...prev.cons, conInput.trim()] }));
+                                        setConInput("");
+                                    }
+                                }
+                            }}
+                        />
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (conInput.trim()) {
+                                    setFormData(prev => ({ ...prev, cons: [...prev.cons, conInput.trim()] }));
+                                    setConInput("");
+                                }
+                            }}
+                            className="p-3 bg-rose-50 text-rose-500 rounded-xl hover:bg-rose-100 transition-colors"
+                        >
+                            <Plus className="w-5 h-5" />
+                        </button>
+                    </div>
+                    <ul className="flex flex-wrap gap-2 mt-2">
+                        {formData.cons.map((con, i) => (
+                            <li key={i} className="px-3 py-1.5 bg-rose-50 text-rose-700 rounded-lg text-xs font-bold flex items-center gap-2 group border border-rose-100">
+                                {con}
+                                <button 
+                                    type="button" 
+                                    onClick={() => setFormData(prev => ({ ...prev, cons: prev.cons.filter((_, idx) => idx !== i) }))}
+                                    className="hover:text-rose-900"
+                                >
+                                    <X className="w-3 h-3" />
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-700 dark:text-zinc-300">Description</label>
+                    <textarea
+                    className="w-full p-4 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all min-h-[100px] placeholder:text-gray-400"
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    placeholder="Notes..."
+                    />
+                </div>
             </div>
           </div>
 
