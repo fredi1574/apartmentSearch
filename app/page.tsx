@@ -2,13 +2,23 @@ import { Sidebar } from "./components/Sidebar";
 import { ApartmentCard } from "./components/ApartmentCard";
 import { StatsBar } from "./components/StatsBar";
 import { ChevronDown, ArrowUpDown } from "lucide-react";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 import { getApartments } from "@/lib/storage";
 
-// Force dynamic rendering to ensure we always get smooth updates
+// Force dynamic rendering
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const apartments = await getApartments();
+  const session = await getServerSession(authOptions);
+  
+  if (!session?.user?.email) {
+    redirect("/api/auth/signin");
+  }
+
+  const userId = (session.user as any).id || session.user.email;
+  const apartments = await getApartments(userId);
 
   return (
     <div className="flex min-h-screen">
@@ -43,7 +53,7 @@ export default async function Home() {
                   <p className="text-sm">Paste a Yad2 link in the sidebar to get started.</p>
               </div>
           ) : (
-            apartments.map((apt) => (
+            apartments.map((apt: any) => (
                 <ApartmentCard key={apt.id} {...apt} status={apt.status || 'active'} />
             ))
           )}

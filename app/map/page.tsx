@@ -1,18 +1,24 @@
 import { Sidebar } from "../components/Sidebar";
 import MapWrapper from "../components/MapWrapper";
 import { getApartments } from "@/lib/storage";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
-export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 export default async function MapPage() {
-    const apartments = await getApartments();
+    const session = await getServerSession(authOptions);
+  
+    if (!session?.user?.email) {
+      redirect("/api/auth/signin");
+    }
+
+    const userId = (session.user as any).id || session.user.email;
+    const apartments = await getApartments(userId);
     
-    // Filter apartments that have location data (mock for now if needed, or real)
-    // For demo purposes, we'll assign random locations around Tel Aviv if missing
-    // in a real app, this should be done at scraping time.
     const apartmentsWithLoc = apartments.map(apt => {
         if (!apt.location) {
-             // Use ID as seed for consistent fallback location
              const seed = apt.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
              return {
                  ...apt,

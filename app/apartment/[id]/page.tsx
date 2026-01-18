@@ -14,14 +14,25 @@ import {
   Home,
   Tag,
   Calendar,
+  Phone,
+  Search,
 } from "lucide-react";
 import { getApartment } from "@/lib/storage";
 import MapWrapper from "../../components/MapWrapper";
 import { ApartmentDetailActions } from "../../components/ApartmentDetailActions";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../../api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
 export default async function ApartmentDetail({ params }: { params: Promise<{ id: string }> }) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) {
+    redirect("/api/auth/signin");
+  }
+  const userId = (session.user as any).id || session.user.email;
+
   const { id } = await params;
-  const apt = await getApartment(id);
+  const apt = await getApartment(userId, id);
 
   if (!apt) {
       return (
@@ -100,13 +111,18 @@ export default async function ApartmentDetail({ params }: { params: Promise<{ id
                         )}
                     </div>
                     <div className="bg-primary px-4 py-2 rounded-2xl shadow-lg shadow-primary/20">
-                        <p className="text-xl font-black text-white">{apt.price}</p>
+                        <p className="text-xl font-black text-white">{apt.price}₪</p>
                     </div>
                 </div>
                 <h2 className="text-2xl font-black text-foreground leading-tight mb-2">{apt.address}</h2>
-                <div className="flex items-center gap-4 text-gray-400 font-bold text-[10px] uppercase tracking-widest">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-gray-400 font-bold text-[10px] uppercase tracking-widest">
                   <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5 text-primary" /> {apt.postedTime}</span>
                   <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5 text-primary" /> Added {new Date(apt.addedAt).toLocaleDateString()}</span>
+                  {apt.contactPhone && (
+                      <span className="flex items-center gap-1.5 bg-gray-100 dark:bg-zinc-800 px-2 py-1 rounded-lg text-foreground">
+                        <Phone className="w-3 h-3 text-primary" /> {apt.contactName ? `${apt.contactName}: ` : ""}{apt.contactPhone}
+                      </span>
+                  )}
                 </div>
             </div>
 
@@ -141,7 +157,7 @@ export default async function ApartmentDetail({ params }: { params: Promise<{ id
                  </h4>
                  <ul className="space-y-2">
                    {pros.length > 0 ? pros.slice(0, 4).map((pro: string, i: number) => (
-                     <li key={i} className="flex items-center gap-2 text-[11px] font-bold text-emerald-900 dark:text-emerald-400" dir={isHebrew(pro) ? "rtl" : "ltr"}>
+                     <li key={i} className="flex items-center gap-3 text-[11px] font-bold text-emerald-900 dark:text-emerald-400" dir={isHebrew(pro) ? "rtl" : "ltr"}>
                         <div className="shrink-0 w-1 h-1 bg-emerald-500 rounded-full" /> <span className="line-clamp-1">{pro}</span>
                      </li>
                    )) : <li className="text-gray-400 italic text-[10px]">None listed.</li>}
@@ -154,7 +170,7 @@ export default async function ApartmentDetail({ params }: { params: Promise<{ id
                  </h4>
                  <ul className="space-y-2">
                    {cons.length > 0 ? cons.slice(0, 4).map((con: string, i: number) => (
-                     <li key={i} className="flex items-center gap-2 text-[11px] font-bold text-rose-900 dark:text-rose-400" dir={isHebrew(con) ? "rtl" : "ltr"}>
+                     <li key={i} className="flex items-center gap-3 text-[11px] font-bold text-rose-900 dark:text-rose-400" dir={isHebrew(con) ? "rtl" : "ltr"}>
                         <div className="shrink-0 w-1 h-1 bg-rose-500 rounded-full" /> <span className="line-clamp-1">{con}</span>
                      </li>
                    )) : <li className="text-gray-400 italic text-[10px]">None listed.</li>}

@@ -18,6 +18,7 @@ export function ManualEntryModal({ isOpen, onClose, editData }: ManualEntryModal
     price: "",
     address: "",
     contactPhone: "",
+    contactName: "",
     entryDate: "",
     hasParking: false,
     rooms: 0,
@@ -41,6 +42,7 @@ export function ManualEntryModal({ isOpen, onClose, editData }: ManualEntryModal
         price: editData.price || "",
         address: editData.address || "",
         contactPhone: editData.contactPhone || "",
+        contactName: editData.contactName || "",
         entryDate: editData.entryDate || "",
         hasParking: editData.hasParking || false,
         rooms: editData.rooms || 0,
@@ -58,6 +60,7 @@ export function ManualEntryModal({ isOpen, onClose, editData }: ManualEntryModal
             price: "",
             address: "",
             contactPhone: "",
+            contactName: "",
             entryDate: "",
             hasParking: false,
             rooms: 0,
@@ -87,7 +90,7 @@ export function ManualEntryModal({ isOpen, onClose, editData }: ManualEntryModal
           location: { lat: parseFloat(lat), lng: parseFloat(lon) }
         }));
       } else {
-        alert("Could not find this address on the map. Please try a more specific address or set it manually on the map.");
+        alert("Could find this address on the map. Please try a more specific address or set it manually on the map.");
       }
     } catch (error) {
       console.error("Geocoding error:", error);
@@ -175,14 +178,17 @@ export function ManualEntryModal({ isOpen, onClose, editData }: ManualEntryModal
                 </div>
                 <div className="space-y-2">
                 <label className="text-sm font-semibold text-gray-700 dark:text-zinc-300">Price</label>
-                <input
-                    type="text"
-                    required
-                    className="w-full p-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-gray-400"
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    placeholder="e.g. 3,600₪"
-                />
+                <div className="relative">
+                    <input
+                        type="text"
+                        required
+                        className="w-full p-3 pr-10 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-gray-400"
+                        value={formData.price}
+                        onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                        placeholder="e.g. 3,600"
+                    />
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 font-bold text-gray-400">₪</span>
+                </div>
                 </div>
                 <div className="space-y-2 col-span-1 md:col-span-2">
                 <label className="text-sm font-semibold text-gray-700 dark:text-zinc-300">Address</label>
@@ -205,6 +211,16 @@ export function ManualEntryModal({ isOpen, onClose, editData }: ManualEntryModal
                     {isGeocoding ? <Loader2 className="w-5 h-5 animate-spin"/> : <Search className="w-5 h-5" />}
                   </button>
                 </div>
+                </div>
+                <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 dark:text-zinc-300">Contact Name</label>
+                <input
+                    type="text"
+                    className="w-full p-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-gray-400"
+                    value={formData.contactName}
+                    onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
+                    placeholder="Owner/Agent Name"
+                />
                 </div>
                 <div className="space-y-2">
                 <label className="text-sm font-semibold text-gray-700 dark:text-zinc-300">Phone Number</label>

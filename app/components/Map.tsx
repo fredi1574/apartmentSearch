@@ -1,8 +1,8 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents, CircleMarker } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { Icon, LatLng } from "leaflet";
+import { Icon } from "leaflet";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Briefcase } from "lucide-react";
@@ -46,7 +46,7 @@ function LocationMarker({
     setPosition: (pos: Location) => void 
 }) {
     useMapEvents({
-        click(e) {
+        dblclick(e) {
             setPosition(e.latlng);
         },
     });
@@ -99,10 +99,16 @@ export default function Map({
 
   return (
     <div className="relative h-full w-full">
-        <MapContainer center={mapCenter} zoom={zoom} style={{ height: "100%", width: "100%" }} scrollWheelZoom={true}>
+        <MapContainer 
+            center={mapCenter} 
+            zoom={zoom} 
+            style={{ height: "100%", width: "100%" }} 
+            scrollWheelZoom={true}
+            doubleClickZoom={false}
+        >
         <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
         />
         
         <LocationMarker position={workLocation} setPosition={setWorkLocation} />
@@ -132,6 +138,16 @@ export default function Map({
             ) : null
         )}
         </MapContainer>
+        
+        {!workLocation && (
+          <div className="absolute top-4 left-4 right-4 md:right-auto md:w-64 bg-white/90 backdrop-blur shadow-xl rounded-2xl p-4 border border-blue-100 z-[1000]">
+              <div className="flex items-center gap-2 mb-1">
+                  <Briefcase className="w-4 h-4 text-rose-500" />
+                  <h4 className="font-bold text-sm text-slate-900">Add Work Location</h4>
+              </div>
+              <p className="text-[10px] text-slate-500">Double-click anywhere on the map to set your work reference point and see distances.</p>
+          </div>
+        )}
     </div>
   );
 }

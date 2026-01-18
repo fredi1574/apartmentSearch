@@ -12,6 +12,7 @@ interface ApartmentProps {
   price: string;
   address: string;
   contactPhone?: string;
+  contactName?: string;
   entryDate?: string;
   hasParking?: boolean;
   rooms: number;
@@ -28,6 +29,7 @@ export function ApartmentCard(props: ApartmentProps) {
     price, 
     address, 
     contactPhone,
+    contactName,
     entryDate,
     hasParking,
     rooms, 
@@ -138,13 +140,15 @@ export function ApartmentCard(props: ApartmentProps) {
         </div>
         <div className="p-5">
           <div className="flex justify-between items-start mb-1">
-            <h3 className={`text-lg font-bold text-foreground ${status === 'irrelevant' ? 'line-through' : ''}`}>{price} <span className="text-sm font-normal text-gray-500">/ mo</span></h3>
+            <h3 className={`text-lg font-bold text-foreground ${status === 'irrelevant' ? 'line-through' : ''}`}>{price}₪ <span className="text-sm font-normal text-gray-500">/ mo</span></h3>
             <span className="text-xs text-gray-500">{postedTime}</span>
           </div>
           <p className="text-foreground dark:text-zinc-300 font-medium">{address}</p>
           <div className="flex justify-between items-center mb-3">
-              {contactPhone ? (
-                  <p className="text-sm text-gray-500 dark:text-zinc-400">{contactPhone}</p>
+              {(contactPhone || contactName) ? (
+                  <p className="text-sm text-gray-500 dark:text-zinc-400">
+                    {contactName ? `${contactName}: ` : ""}{contactPhone}
+                  </p>
               ) : <div />}
               {entryDate && (
                   <p className="text-[10px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded-full">כניסה: {entryDate}</p>
