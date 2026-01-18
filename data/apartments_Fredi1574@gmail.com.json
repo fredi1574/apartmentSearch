@@ -1,0 +1,27 @@
+[
+  {
+    "url": "https://www.yad2.co.il/realestate/item/ov1t5n7f?opened-from=feed&component-type=map&spot=standard&location=999",
+    "price": "3500",
+    "address": "קרן קיימת לישראל 35",
+    "contactPhone": "054-4886577",
+    "entryDate": "",
+    "hasParking": false,
+    "rooms": 2,
+    "floor": 1,
+    "sqm": 52,
+    "imageUrl": "https://img.yad2.co.il/Pic/202601/01/2_2/o/y2_1pa_010120_20260101144339.jpeg?c=6",
+    "description": "",
+    "location": {
+      "lat": 32.0747614,
+      "lng": 34.8065905
+    },
+    "pros": [],
+    "cons": [],
+    "postedTime": "7:40:28 PM",
+    "id": "xjaq3",
+    "addedAt": "2026-01-18T17:40:28.829Z",
+    "status": "active",
+    "userId": "Fredi1574@gmail.com",
+    "contactName": "אילן"
+  }
+]
