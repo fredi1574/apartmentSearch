@@ -1,28 +1,20 @@
-import { Sidebar } from "../../components/Sidebar";
-import Image from "next/image";
-import Link from "next/link";
-import { 
-  Heart, 
-  Share, 
-  X, 
-  Clock, 
-  Trash2, 
-  CheckCircle, 
-  XCircle, 
-  ExternalLink,
-  MapPin,
-  Home,
-  Tag,
-  Calendar,
-  Phone,
-  Search,
-} from "lucide-react";
 import { getApartment } from "@/lib/storage";
-import MapWrapper from "../../components/MapWrapper";
-import { ApartmentDetailActions } from "../../components/ApartmentDetailActions";
+import {
+  CheckCircle,
+  ExternalLink,
+  Heart,
+  Phone,
+  Share,
+  X,
+  XCircle
+} from "lucide-react";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../api/auth/[...nextauth]/route";
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import { authOptions } from "../../api/auth/[...nextauth]/route";
+import { ApartmentDetailActions } from "../../components/ApartmentDetailActions";
+import MapWrapper from "../../components/MapWrapper";
+import { Sidebar } from "../../components/Sidebar";
 
 export default async function ApartmentDetail({ params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
@@ -116,8 +108,6 @@ export default async function ApartmentDetail({ params }: { params: Promise<{ id
                 </div>
                 <h2 className="text-2xl font-black text-foreground leading-tight mb-2">{apt.address}</h2>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-gray-400 font-bold text-[10px] uppercase tracking-widest">
-                  <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5 text-primary" /> {apt.postedTime}</span>
-                  <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5 text-primary" /> Added {new Date(apt.addedAt).toLocaleDateString()}</span>
                   {apt.contactPhone && (
                       <span className="flex items-center gap-1.5 bg-gray-100 dark:bg-zinc-800 px-2 py-1 rounded-lg text-foreground">
                         <Phone className="w-3 h-3 text-primary" /> {apt.contactName ? `${apt.contactName}: ` : ""}{apt.contactPhone}

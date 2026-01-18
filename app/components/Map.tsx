@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 import { Icon } from "leaflet";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Briefcase } from "lucide-react";
+import { Briefcase, Bed, Ruler, Layers, ArrowRight } from "lucide-react";
 import { useUserSettings } from "@/lib/UserSettingsContext";
 
 // Fix Leaflet marker icon issue
@@ -36,6 +36,10 @@ interface Apartment {
   price: string;
   location?: Location;
   imageUrl?: string;
+  rooms?: number;
+  sqm?: number;
+  floor?: number;
+  postedTime?: string;
 }
 
 function LocationMarker({ 
@@ -116,21 +120,56 @@ export default function Map({
         {apartments.map((apt) => 
             apt.location ? (
             <Marker key={apt.id} position={[apt.location.lat, apt.location.lng]} icon={icon}>
-                <Popup>
-                <div className="min-w-[200px]">
-                    <div className="font-bold mb-1">{apt.address}</div>
-                    <div className="text-primary font-bold mb-2">{apt.price}</div>
-                    
-                    {workLocation && (
-                        <div className="mb-2 p-2 bg-gray-50 rounded border border-gray-100 text-xs">
-                            <span className="font-bold">Distance to Work:</span>
-                            <br/> 
-                            {calculateDistance(workLocation, apt.location)} km (Linear)
+                <Popup className="apartment-popup">
+                <div className="min-w-[220px] max-w-[260px] font-manrope bg-transparent overflow-hidden">
+                    {/* Thumbnail - Edge to Edge Top */}
+                    <div className="relative h-28 w-full bg-slate-100 dark:bg-zinc-800 overflow-hidden">
+                        {apt.imageUrl ? (
+                            <>
+                                <div 
+                                    className="absolute inset-0 bg-cover bg-center"
+                                    style={{ backgroundImage: `url("${apt.imageUrl}")` }}
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                            </>
+                        ) : (
+                            <div className="absolute inset-0 flex items-center justify-center text-[10px] text-slate-500 dark:text-zinc-500 uppercase font-black tracking-widest bg-slate-50 dark:bg-zinc-800">
+                                No Property Image
+                            </div>
+                        )}
+                        <div className="absolute bottom-2 right-3 bg-white dark:bg-primary text-slate-900 dark:text-slate-900 px-2 py-0.5 rounded-lg text-[11px] font-black shadow-lg">
+                            {apt.price}₪
                         </div>
-                    )}
+                    </div>
 
-                    <Link href={`/apartment/${apt.id}`} className="text-blue-500 hover:underline text-sm">
-                    View Details
+                    {/* Details */}
+                    <div className="px-4 py-3">
+                        <h3 className="font-bold text-slate-900 dark:text-zinc-600 text-sm mb-1.5 line-clamp-1">{apt.address}</h3>
+                        
+                        <div className="flex items-center gap-3 text-[10px] text-slate-500 dark:text-zinc-400 font-bold mb-3">
+                            <span className="flex items-center gap-1.5"><Bed className="w-3.5 h-3.5 text-primary" /> {apt.rooms} R</span>
+                            <span className="flex items-center gap-1.5"><Layers className="w-3.5 h-3.5 text-primary" /> F {apt.floor}</span>
+                            <span className="flex items-center gap-1.5"><Ruler className="w-3.5 h-3.5 text-primary" /> {apt.sqm}m²</span>
+                        </div>
+                        
+                        {workLocation && (
+                            <div className="p-2 bg-primary/5 dark:bg-primary/10 rounded-xl border border-primary/10 dark:border-primary/20 flex items-center justify-between mt-1">
+                                <div className="flex items-center gap-2">
+                                    <Briefcase className="w-3 h-3 text-primary" />
+                                    <span className="text-[10px] font-bold text-slate-600 dark:text-zinc-400">Work</span>
+                                </div>
+                                <span className="text-xs font-black text-primary">{calculateDistance(workLocation, apt.location)} km</span>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Button - Edge to Edge Bottom */}
+                    <Link 
+                        href={`/apartment/${apt.id}`} 
+                        className="w-full bg-slate-900 dark:bg-primary text-white dark:text-zinc-950 py-3.5 text-xs font-black flex items-center justify-center gap-2 hover:bg-slate-800 dark:hover:bg-primary/90 transition-all group no-underline uppercase tracking-wider"
+                    >
+                        View Details
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
                 </div>
                 </Popup>

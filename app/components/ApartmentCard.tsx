@@ -139,9 +139,8 @@ export function ApartmentCard(props: ApartmentProps) {
           )}
         </div>
         <div className="p-5">
-          <div className="flex justify-between items-start mb-1">
+          <div className="mb-2">
             <h3 className={`text-lg font-bold text-foreground ${status === 'irrelevant' ? 'line-through' : ''}`}>{price}₪ <span className="text-sm font-normal text-gray-500">/ mo</span></h3>
-            <span className="text-xs text-gray-500">{postedTime}</span>
           </div>
           <p className="text-foreground dark:text-zinc-300 font-medium">{address}</p>
           <div className="flex justify-between items-center mb-3">
