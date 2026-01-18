@@ -17,6 +17,8 @@ import { useSession, signOut } from "next-auth/react";
 import { ManualEntryModal } from "./ManualEntryModal";
 import { useUserSettings } from "@/lib/UserSettingsContext";
 
+import { motion } from "framer-motion";
+
 export function Sidebar() {
   const { data: session } = useSession();
   const [url, setUrl] = useState("");
@@ -62,31 +64,55 @@ export function Sidebar() {
     }
   };
 
+  const menuItems = [
+    { href: "/", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/map", label: "Map View", icon: MapIcon },
+  ];
+
   return (
     <>
       <aside className="w-80 border-r border-gray-100 dark:border-zinc-800 flex flex-col fixed inset-y-0 bg-white dark:bg-zinc-900 z-20">
         <div className="p-6 flex flex-col h-full">
-          <div className="mb-8 flex items-center justify-between">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="mb-8 flex items-center justify-between"
+          >
             <div>
                 <h1 className="text-xl font-bold tracking-tight text-foreground">Apartment Hub</h1>
                 <p className="text-sm text-gray-500 dark:text-zinc-400">Manage your rental hunt</p>
             </div>
-          </div>
+          </motion.div>
           
           <nav className="space-y-1 mb-6">
-            <Link href="/" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-primary/5 text-foreground font-medium transition-colors">
-              <LayoutDashboard className="text-primary w-5 h-5" />
-              Dashboard
-            </Link>
-            <Link href="/map" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-900 transition-colors">
-              <MapIcon className="w-5 h-5" />
-              Map View
-            </Link>
+            {menuItems.map((item, idx) => (
+              <motion.div
+                key={item.href}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 + idx * 0.1 }}
+              >
+                <Link 
+                  href={item.href} 
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group ${
+                    idx === 0 ? "bg-primary/5 text-primary" : "text-gray-500 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800/50"
+                  }`}
+                >
+                  <item.icon className={`w-5 h-5 ${idx === 0 ? "text-primary" : "group-hover:text-primary transition-colors"}`} />
+                  <span className="font-semibold">{item.label}</span>
+                </Link>
+              </motion.div>
+            ))}
           </nav>
 
-          <div className="mb-8 p-4 bg-gray-50 dark:bg-zinc-800/50 rounded-2xl border border-gray-100 dark:border-zinc-800/50">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4 }}
+            className="mb-8 p-4 bg-gray-50 dark:bg-zinc-800/50 rounded-2xl border border-gray-100 dark:border-zinc-800/50"
+          >
             <div className="flex items-center gap-2 mb-3">
-              <Briefcase className="w-4 h-4 text-primary" />
+              <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               <span className="text-xs font-bold uppercase tracking-wider text-gray-500">My Work Location</span>
             </div>
             {workLocation ? (
@@ -106,17 +132,24 @@ export function Sidebar() {
                 No location set. Click on the map to set your office.
               </p>
             )}
-          </div>
+          </motion.div>
           
           <div className="mt-auto space-y-4">
-            <div className="space-y-4 pb-6 border-b border-gray-100 dark:border-zinc-800">
-                <button 
-                onClick={() => setIsManualModalOpen(true)}
-                className="w-full bg-white dark:bg-zinc-900 border-2 border-primary text-primary font-bold py-3 rounded-xl hover:bg-primary hover:text-white transition-all flex items-center justify-center gap-2 group"
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="space-y-4 pb-6 border-b border-gray-100 dark:border-zinc-800"
+            >
+                <motion.button 
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setIsManualModalOpen(true)}
+                  className="w-full bg-white dark:bg-zinc-900 border-2 border-primary text-primary font-bold py-3 rounded-xl hover:bg-primary hover:text-white transition-all flex items-center justify-center gap-2 group shadow-sm hover:shadow-primary/20"
                 >
-                <Plus className="w-5 h-5 transition-transform group-hover:rotate-90" />
-                Manual Entry
-                </button>
+                  <Plus className="w-5 h-5 transition-transform group-hover:rotate-90" />
+                  Manual Entry
+                </motion.button>
 
                 <div className="relative py-1">
                     <div className="absolute inset-0 flex items-center">
@@ -135,19 +168,26 @@ export function Sidebar() {
                         placeholder="Paste Yad2 link..." 
                         type="text"
                     />
-                    <button 
+                    <motion.button 
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                         onClick={handleAnalyze}
                         disabled={loading}
-                        className="w-full bg-zinc-100 dark:bg-zinc-800 text-gray-700 dark:text-zinc-300 font-bold py-3 rounded-xl hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                        className="w-full bg-zinc-100 dark:bg-zinc-800 text-gray-700 dark:text-zinc-300 font-bold py-3 rounded-xl hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed shadow-sm"
                         >
                         {loading ? <Loader2 className="w-5 h-5 animate-spin"/> : <Search className="w-5 h-5" />}
                         {loading ? 'Analyzing...' : 'Analyze Link'}
-                    </button>
+                    </motion.button>
                 </div>
-            </div>
+            </motion.div>
 
             {/* Profile Section */}
-            <div className="flex items-center gap-3 p-2 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/30">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="flex items-center gap-3 p-2 rounded-2xl bg-gray-50/50 dark:bg-zinc-800/30"
+            >
                 <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
                     <User className="w-5 h-5" />
                 </div>
@@ -162,7 +202,7 @@ export function Sidebar() {
                 >
                     <LogOut className="w-5 h-5" />
                 </button>
-            </div>
+            </motion.div>
           </div>
         </div>
       </aside>

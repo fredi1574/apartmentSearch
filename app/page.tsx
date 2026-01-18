@@ -53,8 +53,8 @@ export default async function Home() {
                   <p className="text-sm">Paste a Yad2 link in the sidebar to get started.</p>
               </div>
           ) : (
-            apartments.map((apt: any) => (
-                <ApartmentCard key={apt.id} {...apt} status={apt.status || 'active'} />
+            apartments.map((apt: any, index: number) => (
+                <ApartmentCard key={apt.id} {...apt} status={apt.status || 'active'} index={index} />
             ))
           )}
         </div>

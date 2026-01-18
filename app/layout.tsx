@@ -14,6 +14,8 @@ export const metadata: Metadata = {
   description: "Manage your rental hunt",
 };
 
+import AnimatePage from "./components/AnimatePage";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -34,7 +36,9 @@ export default function RootLayout({
       >
         <AuthProvider>
           <UserSettingsProvider>
-            {children}
+            <AnimatePage>
+              {children}
+            </AnimatePage>
           </UserSettingsProvider>
         </AuthProvider>
       </body>
