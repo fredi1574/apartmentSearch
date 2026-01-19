@@ -1,38 +1,73 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { prisma } from "@/lib/db";
+import { compare } from "bcrypt";
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
+  pages: {
+    signIn: "/auth/signin",
+  },
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text", placeholder: "jsmith@example.com" },
-        name: { label: "Name", type: "text", placeholder: "John Smith" }
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (credentials?.email) {
-          // In a real app, you'd check a database here.
-          // For now, we allow anyone to "log in" to demonstrate data separation.
-          return {
-            id: credentials.email, // Use email as ID for simplicity
-            name: credentials.name || credentials.email.split('@')[0],
-            email: credentials.email,
-          };
+        if (!credentials?.email || !credentials?.password) {
+          return null;
         }
-        return null;
-      }
-    })
+
+        const user = await prisma.user.findUnique({
+          where: {
+            email: credentials.email,
+          },
+        });
+
+        if (!user) {
+          return null;
+        }
+
+        const isPasswordValid = await compare(credentials.password, user.password);
+
+        if (!isPasswordValid) {
+          return null;
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        };
+      },
+    }),
   ],
   callbacks: {
-    async session({ session, token }: any) {
-      if (session.user) {
-        (session.user as any).id = token.sub;
+    async session({ session, token }) {
+      if (token && session.user) {
+        return {
+          ...session,
+          user: {
+            ...session.user,
+            id: token.id,
+          },
+        };
       }
       return session;
     },
-  },
-  pages: {
-    signIn: '/auth/signin',
+    async jwt({ token, user }) {
+      if (user) {
+        return {
+          ...token,
+          id: user.id,
+        };
+      }
+      return token;
+    },
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
