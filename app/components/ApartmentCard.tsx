@@ -27,18 +27,18 @@ interface ApartmentProps {
 }
 
 export function ApartmentCard(props: ApartmentProps) {
-  const { 
+  const {
     id,
-    price, 
-    address, 
+    price,
+    address,
     contactPhone,
     contactName,
     entryDate,
     hasParking,
-    rooms, 
-    floor, 
-    sqm, 
-    imageUrl, 
+    rooms,
+    floor,
+    sqm,
+    imageUrl,
     postedTime = "Just now",
     status,
     index = 0
@@ -46,7 +46,7 @@ export function ApartmentCard(props: ApartmentProps) {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  
+
   const statusStyles = {
     active: "",
     contacted: "bg-status-contact text-[#7a5a00]",
@@ -55,11 +55,11 @@ export function ApartmentCard(props: ApartmentProps) {
   };
 
   const statusLabel = {
-      active: null,
-      contacted: "To Contact",
-      visited: "Visited",
-      irrelevant: "Irrelevant"
-  }
+    active: null,
+    contacted: "Contacted",
+    visited: "Visited",
+    irrelevant: "Irrelevant"
+  };
 
   const handleFavorite = (e: MouseEvent) => {
     e.preventDefault();
@@ -77,7 +77,7 @@ export function ApartmentCard(props: ApartmentProps) {
   const handleDelete = async (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     if (!confirm("Are you sure you want to delete this listing?")) return;
 
     setIsDeleting(true);
@@ -107,33 +107,33 @@ export function ApartmentCard(props: ApartmentProps) {
         whileHover={{ y: -5 }}
         className="h-full"
       >
-        <Link 
-          href={`/apartment/${id}`} 
+        <Link
+          href={`/apartment/${id}`}
           className={`group block h-full bg-white dark:bg-zinc-900 rounded-2xl border border-gray-100 dark:border-zinc-800 overflow-hidden shadow-sm hover:shadow-xl hover:border-primary/20 transition-all duration-300 ${status === 'irrelevant' ? 'opacity-70 grayscale-[0.5]' : ''} ${isDeleting ? 'opacity-50 scale-[0.98]' : ''}`}
         >
           <div className="relative aspect-[16/10] bg-gray-200 dark:bg-zinc-800 overflow-hidden">
-            <div 
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                style={{ backgroundImage: `url("${imageUrl}")` }}
+            <div
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+              style={{ backgroundImage: `url("${imageUrl}")` }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            
+
             <div className="absolute top-3 right-3 flex gap-2">
-                {hasParking && (
-                    <div className="px-2 py-1 rounded-md bg-white/90 dark:bg-black/50 backdrop-blur-sm text-[10px] font-bold uppercase text-primary border border-primary/20 z-10">
-                        Parking
-                    </div>
-                )}
-              <motion.button 
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={handleEdit}
-                  className="p-2 rounded-full bg-white/90 dark:bg-black/50 backdrop-blur-sm text-gray-400 hover:text-primary transition-colors z-10 shadow-sm"
-                  title="Edit listing"
+              {hasParking && (
+                <div className="px-2 py-1 rounded-md bg-white/90 dark:bg-black/50 backdrop-blur-sm text-[10px] font-bold uppercase text-primary border border-primary/20 z-10">
+                  Parking
+                </div>
+              )}
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={handleEdit}
+                className="p-2 rounded-full bg-white/90 dark:bg-black/50 backdrop-blur-sm text-gray-400 hover:text-primary transition-colors z-10 shadow-sm"
+                title="Edit listing"
               >
-                  <Pencil className="w-4 h-4" />
+                <Pencil className="w-4 h-4" />
               </motion.button>
-              <motion.button 
+              <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={handleDelete}
@@ -143,7 +143,7 @@ export function ApartmentCard(props: ApartmentProps) {
               >
                 <Trash2 className="w-4 h-4" />
               </motion.button>
-              <motion.button 
+              <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={handleFavorite}
@@ -153,11 +153,11 @@ export function ApartmentCard(props: ApartmentProps) {
               </motion.button>
             </div>
             {status !== 'active' && (
-                <div className="absolute bottom-3 left-3">
-                    <span className={`px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider shadow-sm ${statusStyles[status]}`}>
-                        {statusLabel[status]}
-                    </span>
-                </div>
+              <div className="absolute bottom-3 left-3">
+                <span className={`px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider shadow-sm ${statusStyles[status]}`}>
+                  {statusLabel[status]}
+                </span>
+              </div>
             )}
           </div>
           <div className="p-5">
@@ -168,14 +168,14 @@ export function ApartmentCard(props: ApartmentProps) {
             </div>
             <p className="text-foreground dark:text-zinc-200 font-semibold mb-3 line-clamp-1">{address}</p>
             <div className="flex justify-between items-center mb-4">
-                {(contactPhone || contactName) ? (
-                    <p className="text-sm text-gray-500 dark:text-zinc-400">
-                      {contactName ? `${contactName}: ` : ""}{contactPhone}
-                    </p>
-                ) : <div />}
-                {entryDate && (
-                    <p className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-1 rounded-full border border-primary/20">כניסה: {entryDate}</p>
-                )}
+              {(contactPhone || contactName) ? (
+                <p className="text-sm text-gray-500 dark:text-zinc-400">
+                  {contactName ? `${contactName}: ` : ""}{contactPhone}
+                </p>
+              ) : <div />}
+              {entryDate && (
+                <p className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-1 rounded-full border border-primary/20">כניסה: {entryDate}</p>
+              )}
             </div>
             <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-zinc-400 pt-4 border-t border-gray-50 dark:border-zinc-800">
               <div className="flex items-center gap-1.5 hover:text-primary transition-colors cursor-default">
@@ -194,9 +194,9 @@ export function ApartmentCard(props: ApartmentProps) {
           </div>
         </Link>
       </motion.div>
-      <ManualEntryModal 
-        isOpen={isEditModalOpen} 
-        onClose={() => setIsEditModalOpen(false)} 
+      <ManualEntryModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
         editData={props}
       />
     </>

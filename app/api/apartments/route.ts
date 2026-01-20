@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { getApartments, saveApartment, deleteApartment, updateApartment } from '@/lib/storage';
+import { getCoordinates } from '@/lib/geocoding';
 
 export async function GET() {
     const session = await getServerSession(authOptions);
@@ -27,6 +28,15 @@ export async function POST(request: Request) {
             apartment.addedAt = new Date().toISOString();
             apartment.status = apartment.status || 'active';
         }
+
+        // Attempt to Geocode if address exists and no location provided
+        if (apartment.address && !apartment.location) {
+            const location = await getCoordinates(apartment.address);
+            if (location) {
+                apartment.location = location;
+            }
+        }
+
         await saveApartment(userId, apartment);
         return NextResponse.json({ success: true, apartment });
     } catch (error) {
