@@ -1,5 +1,59 @@
 [
   {
+    "url": "https://www.yad2.co.il/realestate/item/ec9ptlbh?opened-from=feed&component-type=map&spot=standard&location=999",
+    "price": "4200",
+    "address": "כצנלסון 25 קריית יוסף גבעתיים",
+    "contactPhone": "050-2248934",
+    "contactName": "גיא",
+    "entryDate": "",
+    "hasParking": false,
+    "rooms": 2,
+    "floor": 1,
+    "sqm": 45,
+    "imageUrl": "https://img.yad2.co.il/Pic/202601/16/2_2/o/y2_1pa_010677_20260116151732.jpeg",
+    "description": "",
+    "location": {
+      "lat": 32.0752006,
+      "lng": 34.80406
+    },
+    "pros": [
+      "Close to work"
+    ],
+    "cons": [
+      "Fucking ugly"
+    ],
+    "postedTime": "2:24:19 AM",
+    "id": "dld2tw",
+    "addedAt": "2026-01-20T00:24:19.439Z",
+    "status": "active",
+    "userId": "cmkkequnh0000pj25eq5peyaj"
+  },
+  {
+    "url": "https://www.yad2.co.il/realestate/item/i699feyq?opened-from=feed&component-type=map&spot=standard&location=999",
+    "price": "4900",
+    "address": "המגדל 1 גבעתיים",
+    "contactPhone": "052-6880110",
+    "contactName": "איתמר",
+    "entryDate": "",
+    "hasParking": false,
+    "rooms": 2,
+    "floor": 2,
+    "sqm": 45,
+    "imageUrl": "https://img.yad2.co.il/Pic/202512/25/2_2/o/y2_1pa_010578_20251225120601.jpeg",
+    "description": "",
+    "location": {
+      "lat": 32.0716711,
+      "lng": 34.8073758
+    },
+    "pros": [],
+    "cons": [],
+    "postedTime": "2:18:00 AM",
+    "id": "zxs8s",
+    "addedAt": "2026-01-20T00:18:00.900Z",
+    "status": "active",
+    "userId": "cmkkequnh0000pj25eq5peyaj"
+  },
+  {
     "url": "https://www.yad2.co.il/realestate/item/ov1t5n7f?opened-from=feed&component-type=map&spot=standard&location=999",
     "price": "3500",
     "address": "קרן קיימת לישראל 35",
@@ -20,7 +74,9 @@
       "Porch",
       "Looks nice"
     ],
-    "cons": [],
+    "cons": [
+      "Old"
+    ],
     "postedTime": "2:10:52 AM",
     "id": "7hcaoe",
     "addedAt": "2026-01-19T00:10:53.329Z",
